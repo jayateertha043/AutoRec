@@ -125,7 +125,8 @@ class subdomain:
         global urls
         urls.clear()
         try:
-            subdomain().sublister(url)
+            pass
+ #           subdomain().sublister(url)
         except:
             print("sublist3r failed")
         
