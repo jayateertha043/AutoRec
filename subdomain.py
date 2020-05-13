@@ -1,6 +1,6 @@
 import requests
 import json
-from Sublist3r import sublist3r
+from .Sublist3r import sublist3r
 from provider import providers
 import dns.resolver
 import wappalyze as w
@@ -103,7 +103,6 @@ class subdomain:
         c=0
         for url in urls:
             try:
-                inner={}
                 url='http://'+url
                 response=requests.get(url)
                 if response.status_code==200 or response.status_code==302:
