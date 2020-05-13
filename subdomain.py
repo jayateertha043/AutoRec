@@ -1,6 +1,6 @@
 import requests
 import json
-from .Sublist3r import sublist3r
+import sublist3r
 from provider import providers
 import dns.resolver
 import wappalyze as w
