@@ -44,3 +44,6 @@ def alive():
     alive_urls,data=s().alive(urls)
     print (data)
     return render_template('alive.html',data=data,urls=urls,loaded=False)
+    
+if __name__ == '__main__':
+    app.run()
