@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>AutoRec</title>
+    <link href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='assets/fonts/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='assets/css/myStyle.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='assets/css/Pretty-Search-Form-1.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='assets/css/Pretty-Search-Form.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='assets/css/styles.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='assets/css/pace-theme-center-simple.css') }}" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fluid text-center">
+        <h1 class="myheading">AutoRec</h1>
+    </div>
+    <div class="container-fluid">
+        <form class="search-form" style="margin: 25px;" action="/output" method="POST">
+            <div class="input-group">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-search"></i></span></div><input name ="search" class="form-control" type="text" placeholder="I am looking for..">
+                <div class="input-group-append"><button class="btn btn-light" type="submit" onclick="Pace.restart()">Go</button></div>
+            </div>
+        </form>
+    </div>
+    <br>
+    <div id = "myDiv" class="mx-auto" style="display:none"><img id = "loading" src = "{{url_for('static', filename='assets/images/loading.gif') }}"></div><br>
+    <script type = "text/javascript">
+
+        function show() {
+            document.getElementById("myDiv").style.display="block";
+            setTimeout("hide()", 5000);  // 5 seconds
+        }
+        function hide() {
+            document.getElementById("myDiv").style.display="none";
+        }
+        </script>
+    <script src="{{url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/pace.min.js') }}"></script>
+    <script src="{{url_for('static', filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
+</body>
+
+</html>
