@@ -8,6 +8,7 @@ from utils import func as f
 from report_const import html_start,html_end
 import os.path
 from slack import sendfiletoslack,sendmessage
+import time
 
 urls=[]
 takeover_urls=[]
@@ -147,6 +148,7 @@ class subdomain:
     
 
     def report(self,url):
+        start=time.time()
         report_urls=self.all(url)
         print("url:completed")
         print(report_urls)
@@ -182,11 +184,13 @@ class subdomain:
         for t in report_takeover:
             html_takeover=html_takeover+f'''<tr>
             <td>
-           <a class="ahead" href="http://{t}"></a></td>
+           <a class="ahead" href="http://{t}">{t}</a></td>
             </tr>'''
         html_takeover=html_takeover+'</table>'
-
-        html_final=html_start+html_subdomains+html_alive+html_takeover+html_end
+        end=time.time()
+        total_time=end-start
+        html_time=f'<p style="color:white">Report Generated in:{total_time}</p><br>'
+        html_final=html_start+html_time+html_subdomains+html_alive+html_takeover+html_end
         print("writing to file")
         filename=f"{url}.html"
         directory = './reports/'
