@@ -23,13 +23,13 @@ def sendfiletoslack(filename,filepath):
         return True
     return False
 
-def sendmessage():
+def sendmessage(msg):
     print("inside send message")
     data = {
     'token': token,
     'channel': channel,    
     'as_user': True,
-    'text': "Failed To Recon,Something Wrong "
+    'text': msg
     }
     response=requests.post(url='https://slack.com/api/chat.postMessage',
               data=data)

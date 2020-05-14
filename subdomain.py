@@ -61,8 +61,12 @@ class subdomain:
         print(screenshot_urls)
 
     def subtakeover(self,subdomains):
-        global takeover_urls
+        global takeover_urls,alive_urls,data
+        alive_urls.clear()
+        data.clear()
+        c=0
         takeover_urls.clear()
+        text=''
         for subdomain in subdomains:
             try:
                 answer=dns.resolver.query(subdomain, "CNAME")
@@ -71,9 +75,21 @@ class subdomain:
             except:
                cname=''
             try:
-                data=requests.get('http://'+subdomain,timeout=10).text
+                response=requests.get('http://'+subdomain,timeout=3)
+                text=response.text
+                if response.status_code==200 or response.status_code==302:
+                    c=c+1
+                    alive_urls.append(subdomain)
+                    data[c]={}
+                    data[c]["url"]=subdomain
+                    scripts=f.script_extractor(text)
+                    js=f.js_extractor(text)
+                    wap=w.wappalyzer(response,scripts,js)
+                    waps=','.join(list(set(wap)))
+                    data[c]["technologies"]=waps
+#                    data[c]["cname"]=cname
             except:
-                data=''
+                text=''
             for k in providers.provider:
                 c=False
                 r=False
@@ -84,46 +100,21 @@ class subdomain:
                         print('cname match')
                 for res in k['response']:
                     print
-                    if res in data:
+                    if res in text:
                         print('response match')
                         r=True
                 if c or r:
                     p=True
                     if p:
-                        print(subdomain+' may be vulnerable to takeover')
+                        print(subdomain+'may be vulnerable to takeover')
                         print("CName - "+cname)
                         takeover_urls.append(subdomain)
                 else:
                     p=False
                     continue
                 
-        return takeover_urls
+        return alive_urls,data,takeover_urls
     
-    def alive(self,urls):
-        global alive_urls,data
-        alive_urls.clear()
-        data.clear()
-        print(urls)
-        c=0
-        for url in urls:
-            try:
-                url='http://'+url
-                response=requests.get(url)
-                if response.status_code==200 or response.status_code==302:
-                    c=c+1
-                    alive_urls.append(url)
-                    data[c]={}
-                    data[c]["url"]=url
-                    scripts=f.script_extractor(response.text)
-                    js=f.js_extractor(response.text)
-                    wap=w.wappalyzer(response,scripts,js)
-                    waps=','.join(list(set(wap)))
-                    data[c]["technologies"]=waps
-
-
-            except:
-                pass
-        return alive_urls,data
 
     def all(self,url):
         global urls
@@ -151,12 +142,10 @@ class subdomain:
         start=time.time()
         report_urls=self.all(url)
         print("url:completed")
-        print(report_urls)
-        report_alive_urls,report_alive=self.alive(report_urls)
-        print(report_alive_urls)
-        report_takeover=self.subtakeover(report_urls)
-        print("takeover:complete")
-        print(report_takeover)
+        print("total:"+str(len(report_urls)))
+        report_alive_urls,report_alive,report_takeover=self.subtakeover(report_urls)
+        print("Completed alive and takeover")
+
 
         html_subdomains='<p class="dahead">Subdomains:</p><br><table>'
         for u in report_urls:
@@ -188,8 +177,8 @@ class subdomain:
             </tr>'''
         html_takeover=html_takeover+'</table>'
         end=time.time()
-        total_time=end-start
-        html_time=f'<p style="color:white">Report Generated in:{total_time}</p><br>'
+        total_time=(end-start)/60
+        html_time=f'<p style="color:white">Report Generated in:{total_time} mins</p><br>'
         html_final=html_start+html_time+html_subdomains+html_alive+html_takeover+html_end
         print("writing to file")
         filename=f"{url}.html"
@@ -215,7 +204,8 @@ class subdomain:
                 print("file not present or file creation failed")
             
         except:
-            sendmessage()
+            msg="something Wrong either coudn't remove local file or slack error"
+            sendmessage(msg)
             print("something Wrong either coulnt remove local file or slack error")
             
 
