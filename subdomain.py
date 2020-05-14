@@ -156,14 +156,14 @@ class subdomain:
         print("takeover:complete")
         print(report_takeover)
 
-        html_subdomains='<table>'
+        html_subdomains='<p class="dahead">Subdomains:</p><br><table>'
         for u in report_urls:
             html_subdomains=html_subdomains+f'''<tr>
             <td>
-           <a class="ahead" href="http://{u}"></a></td>
+           <a class="ahead" href="http://{u}">{u}</a></td>
             </tr>'''
         html_subdomains=html_subdomains+'</table>'
-        html_alive=f'<p>Alive:{len(report_alive)}/{len(report_urls)}</p></br>'
+        html_alive=f'<p class="dahead">Alive:{len(report_alive)}/{len(report_urls)}</p></br>'
         html_alive=html_alive+'<table class="text-center" align="center" style="margin: 0px auto;width:80%;border: 1px solid black;background-color: cornflowerblue"><tr><th>SNO</th><th>HOST</th><th>Technologies Used</th></tr>'
         
         for key,value in report_alive.items():
