@@ -9,6 +9,8 @@ from report_const import html_start,html_end
 import os.path
 from slack import sendfiletoslack,sendmessage
 import time
+import pydf
+from sys import platform
 
 urls=[]
 takeover_urls=[]
@@ -182,12 +184,24 @@ class subdomain:
         html_final=html_start+html_time+html_subdomains+html_alive+html_takeover+html_end
         print("writing to file")
         filename=f"{url}.html"
+        pdffilename=f"{url}.pdf"
         directory = './reports/'
         if not os.path.isdir(directory):
             os.mkdir(directory)
         file_path = os.path.join(directory, filename)
+        pdffile_path=os.path.join(directory, pdffilename)
+        pdfremove_file='./reports/'+pdffilename
         with open(file_path,'w') as html_file:  
             html_file.write(html_final)
+            print("html write success")
+        if platform == "linux" or platform == "linux2":
+            print("writing pdf")
+            pdf = pydf.generate_pdf(html_final)
+            with open(pdffile_path, 'wb') as f:
+                f.write(pdf)
+                sendfiletoslack(pdffilename,pdffile_path)
+            os.remove(pdfremove_file)
+
         print("write success")
         try:
             if(sendfiletoslack(filename,file_path)):

@@ -13,7 +13,7 @@ def sendfiletoslack(filename,filepath):
     }
 
     file_upload = {
-    "file":(filename, open(filepath, 'rb'), 'html')
+    "file":(filename, open(filepath, 'rb'),)
     }
 
 
