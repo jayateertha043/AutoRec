@@ -5,6 +5,9 @@ from provider import providers
 import dns.resolver
 import wappalyze as w
 from utils import func as f
+from report_const import html_start,html_end
+import os.path
+from slack import sendfiletoslack,sendmessage
 
 urls=[]
 takeover_urls=[]
@@ -143,3 +146,77 @@ class subdomain:
         return urls
     
 
+    def report(self,url):
+        report_urls=self.all(url)
+        print("url:completed")
+        print(report_urls)
+        report_alive_urls,report_alive=self.alive(report_urls)
+        print(report_alive_urls)
+        report_takeover=self.subtakeover(report_urls)
+        print("takeover:complete")
+        print(report_takeover)
+
+        html_subdomains='<table>'
+        for u in report_urls:
+            html_subdomains=html_subdomains+f'''<tr>
+            <td>
+           <a class="ahead" href="http://{u}"></a></td>
+            </tr>'''
+        html_subdomains=html_subdomains+'</table>'
+        html_alive=f'<p>Alive:{len(report_alive)}/{len(report_urls)}</p></br>'
+        html_alive=html_alive+'<table class="text-center" align="center" style="margin: 0px auto;width:80%;border: 1px solid black;background-color: cornflowerblue"><tr><th>SNO</th><th>HOST</th><th>Technologies Used</th></tr>'
+        
+        for key,value in report_alive.items():
+            html_alive=html_alive+f'''
+        <tr>
+            <td class="ahead">{key}</td>
+            <td>
+           <a class="ahead" href="http://{value["url"]}">{value["url"]}</a></td>
+           
+           <td class="ahead">{value["technologies"]}</td>
+            </tr>'''
+        html_alive=html_alive+'</table><br>'
+
+        html_takeover='<p class="dahead">Possible Subdomain Takeovers:</p><table></br>'
+
+        for t in report_takeover:
+            html_takeover=html_takeover+f'''<tr>
+            <td>
+           <a class="ahead" href="http://{t}"></a></td>
+            </tr>'''
+        html_takeover=html_takeover+'</table>'
+
+        html_final=html_start+html_subdomains+html_alive+html_takeover+html_end
+        print("writing to file")
+        filename=f"{url}.html"
+        directory = './reports/'
+        if not os.path.isdir(directory):
+            os.mkdir(directory)
+        file_path = os.path.join(directory, filename)
+        with open(file_path,'w') as html_file:  
+            html_file.write(html_final)
+        print("write success")
+        try:
+            if(sendfiletoslack(filename,file_path)):
+                print("file sent removing now")
+                remove_file='./reports/'+filename
+                print(remove_file)
+                try:
+                    os.remove(remove_file)
+                except:
+                    print("file not present or file creation failed")
+            try:
+                os.remove(file_path)
+            except:
+                print("file not present or file creation failed")
+            
+        except:
+            sendmessage()
+            print("something Wrong either coulnt remove local file or slack error")
+            
+
+
+
+
+            
+        

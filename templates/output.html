@@ -17,6 +17,7 @@
 <body>
     <div class="container-fluid text-center">
         <h1 class="myheading">AutoRec</h1>
+        <h2 class="dahead">Sit Back and Relax While We generate your Report and send it to Slack</h2>
     </div>
     <div class="container-fluid">
         <form class="search-form" action="/output" style="margin: 25px;" method="POST">
@@ -26,29 +27,7 @@
             </div>
         </form>
     </div>
-    {% block content %}
-    {% if loaded %}
-    <div class="container-fluid text-center list-inline dahead">
-
-            <a class="dahead" href="{{url_for('subdomains')}}"><u>Subdomains</u></a>
-            <a class="dahead" href="{{url_for('alive')}}"><u>Fingerprint(Alive Hosts)</u></a>
-            <a class="dahead" href="{{url_for('takeovers')}}"><u>Subdomain Takeovers</u></a>
-
-        </div>
-    {% endif %}
-    
-    {% endblock content %}
-    <div id = "myDiv" class="mx-auto" style="display:none"><img id = "loading" src = "{{url_for('static', filename='assets/images/loading.gif') }}"></div><br>
-    <script type = "text/javascript">
-
-        function show() {
-            document.getElementById("myDiv").style.display="block";
-            setTimeout("hide()", 5000);  // 5 seconds
-        }
-        function hide() {
-            document.getElementById("myDiv").style.display="none";
-        }
-        </script>
+ 
 
     <script src="{{url_for('static', filename='assets/js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/pace.min.js') }}"></script>
