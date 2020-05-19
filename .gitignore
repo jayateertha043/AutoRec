@@ -1,6 +1,9 @@
 .idea
 *.pyc
 
+__pycache__/
+*.py[cod]
+
 # Build
 .cache
 .eggs
@@ -13,13 +16,13 @@ pdfkit.egg-info
 .python-version
 
 # Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
 *$py.class
 /__pycache__/*
 /.vscode
 /.vscode/*
-/.vscode/settings.json
+
+
+.vscode/settings.json
 # C extensions
 *.so
 *.pyc
