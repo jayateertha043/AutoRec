@@ -54,23 +54,22 @@ class subdomain:
             urls.append(x)
         urls=list(set(urls)) 
 
-    def screenshot(self,urls):
+    def screenshot(self,url):
         global report_alive
-        c=1
-        for url in urls:
-            temp=url
-            url=f'https://www2png.com/api/capture/{APIKEY}?url=https://'+ url           
+        surl='error'
+        temp=url
+        url=f'https://www2png.com/api/capture/{APIKEY}?url=https://'+ url           
+        response=requests.get(url)
+        if 'error' in response.text:
+            url=f'https://www2png.com/api/capture/{APIKEY}?url=http://'+ temp
             response=requests.get(url)
-            if 'error' in response.text:
-                url=f'https://www2png.com/api/capture/{APIKEY}?url=http://'+ temp
-                response=requests.get(url)
-            r=json.loads(response.text)
+        r=json.loads(response.text)
+        try:
             if r["image_url"]:
                 surl=r["image_url"]
-            else:
-                surl='error'
-            report_alive[c]["image"]=surl
-            c=c+1
+        except:
+            return surl
+        return surl
 
 
     def subtakeover(self,subdomains):
@@ -89,12 +88,12 @@ class subdomain:
                cname=''
             try:
                 try:
-                    response=requests.get('http://'+subdomain,timeout=5)
+                    response=requests.get('http://'+subdomain,timeout=10)
                     text=response.text
                 except:
-                    response=requests.get('https://'+subdomain,timeout=5)
+                    response=requests.get('https://'+subdomain,timeout=10)
                     text=response.text
-                if response.status_code==200 or response.status_code==302 or response.status_code==301:
+                if response.status_code==200 or response.status_code==301 or response.status_code==302 :
                     c=c+1
                     alive_urls.append(subdomain)
                     data[c]={}
@@ -104,7 +103,7 @@ class subdomain:
                     wap=w.wappalyzer(response,scripts,js)
                     waps=','.join(list(set(wap)))
                     data[c]["technologies"]=waps
-                    data[c]["image"]=''
+                    data[c]["image"]=self.screenshot(subdomain)
 #                    data[c]["cname"]=cname
             except:
                 text=''
@@ -162,7 +161,6 @@ class subdomain:
         report_urls=self.all(url)
         print("total subdomains found:"+str(len(report_urls)))
         report_alive_urls,report_alive,report_takeover=self.subtakeover(report_urls)
-        self.screenshot(report_alive_urls)
         print("Completed alive screenshots and takeover")
 
 
