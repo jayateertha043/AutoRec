@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template ,url_for,redirect
 from threading import Thread
-from AutoRec.autorec import autorec 
+from main import autorec
 app = Flask(__name__)
 
 urls=[]
