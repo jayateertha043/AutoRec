@@ -1,5 +1,8 @@
 import requests
-from configs import token,channel
+try:
+    from configs import token,channel
+except:
+    from config import token,channel
 
 def sendfiletoslack(filename,filepath):
     

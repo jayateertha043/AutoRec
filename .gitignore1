@@ -7,7 +7,7 @@
 pdfkit.egg-info
 
 
-/configs.py
+/config.py
 # Tests
 .tox
 .python-version

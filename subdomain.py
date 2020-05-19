@@ -11,7 +11,10 @@ from slack import sendfiletoslack,sendmessage
 import time
 import pydf
 from sys import platform
-from configs import APIKEY
+try:
+    from configs import APIKEY
+except:
+    from config import APIKEY
 
 urls=[]
 takeover_urls=[]
