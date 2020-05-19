@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template ,url_for,redirect
 from threading import Thread
-import autorec.autorec as s
+from AutoRec.autorec import autorec 
 app = Flask(__name__)
 
 urls=[]
@@ -16,7 +16,7 @@ def myHome():
 @app.route('/output',methods=['GET','POST'])
 def output():
     global urls,url
-    s1=s()
+    s1=autorec()
     if request.method=='POST':
         if request.form['search']:
             url=request.form['search']
