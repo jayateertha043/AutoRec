@@ -31,7 +31,7 @@ class subdomain:
         for i in range(data["count"]):
             urls.append(data["passive_dns"][i]["hostname"])
         urls=list(set(urls))        
-        print(urls)
+
 
     def crtsh(self,url):
         global urls
@@ -45,7 +45,7 @@ class subdomain:
             for x in ele1:
                 urls.append(x)
         urls=list(set(urls)) 
-        print(urls)
+
     
     def sublister(self,url):
         global urls
@@ -69,8 +69,6 @@ class subdomain:
                 surl=r["image_url"]
             else:
                 surl='error'
-            print(surl)
-            print(report_alive)
             report_alive[c]["image"]=surl
             c=c+1
 
@@ -91,10 +89,10 @@ class subdomain:
                cname=''
             try:
                 try:
-                    response=requests.get('http://'+subdomain)
+                    response=requests.get('http://'+subdomain,timeout=5)
                     text=response.text
                 except:
-                    response=requests.get('https://'+subdomain)
+                    response=requests.get('https://'+subdomain,timeout=5)
                     text=response.text
                 if response.status_code==200 or response.status_code==302 or response.status_code==301:
                     c=c+1
@@ -117,16 +115,16 @@ class subdomain:
                 for cn in k['cname']:
                     if cn in cname:
                         c=True
-                        print('cname match')
+#                       print('cname match')
                 for res in k['response']:
                     print
                     if res in text:
-                        print('response match')
+#                      print('response match')
                         r=True
                 if c or r:
                     p=True
                     if p:
-                        print(subdomain+'may be vulnerable to takeover')
+                        print(subdomain+' may be vulnerable to takeover')
                         print("CName - "+cname)
                         takeover_urls.append(subdomain)
                 else:
@@ -162,11 +160,10 @@ class subdomain:
         global report_alive
         start=time.time()
         report_urls=self.all(url)
-        print("url:completed")
-        print("total:"+str(len(report_urls)))
+        print("total subdomains found:"+str(len(report_urls)))
         report_alive_urls,report_alive,report_takeover=self.subtakeover(report_urls)
         self.screenshot(report_alive_urls)
-        print("Completed alive and takeover")
+        print("Completed alive screenshots and takeover")
 
 
         html_subdomains='<p class="dahead">Subdomains:</p><br><table>'
@@ -187,7 +184,7 @@ class subdomain:
            <a class="ahead" href="http://{value["url"]}">{value["url"]}</a></td>
            
            <td class="ahead">{value["technologies"]}</td>
-           <td class="ahead"><a href="{value["image"]}"><img src={value["image"]} height=212px width=50px/></a></td>
+           <td class="ahead"><a href="{value["image"]}"><img src={value["image"]} height=500px width=500px/></a></td>
             </tr>'''
         html_alive=html_alive+'</table><br>'
 
@@ -217,7 +214,7 @@ class subdomain:
             print("html write success")
         if platform == "linux" or platform == "linux2":
             print("writing pdf")
-            pdf = pydf.generate_pdf(html_final)
+            pdf = pydf.generate_pdf(html_final,)
             with open(pdffile_path, 'wb') as f:
                 f.write(pdf)
                 sendfiletoslack(pdffilename,pdffile_path)
