@@ -143,7 +143,7 @@ cython_debug/
 
 #configheroku
 
-#/configs.py
-#/Procfile
-#/runtime.txt
+/configs.py
+/Procfile
+/runtime.txt
 #git rm -rf --cached .
