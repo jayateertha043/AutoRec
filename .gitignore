@@ -19,8 +19,10 @@ __pycache__/
 /__pycache__/*
 /.vscode
 /.vscode/*
+/.vscode/settings.json
 # C extensions
 *.so
+*.pyc
 
 # Distribution / packaging
 .Python
