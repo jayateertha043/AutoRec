@@ -1,5 +1,5 @@
 import requests
-from slack_config import token,channel
+from configs import token,channel
 
 def sendfiletoslack(filename,filepath):
     

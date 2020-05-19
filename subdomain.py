@@ -11,12 +11,14 @@ from slack import sendfiletoslack,sendmessage
 import time
 import pydf
 from sys import platform
+from configs import APIKEY
 
 urls=[]
 takeover_urls=[]
 screenshot_urls=[]
 alive_urls=[]
 data={}
+report_alive={}
 class subdomain:
     def alienvault(self,url):
         global urls
@@ -50,17 +52,25 @@ class subdomain:
         urls=list(set(urls)) 
 
     def screenshot(self,urls):
-        global screenshot_urls
+        global report_alive
+        c=1
         for url in urls:
-            url='https://www.googleapis.com/pagespeedonline/v2/runPagespeed?screenshot=true&url=http://'+ url
+            temp=url
+            url=f'https://www2png.com/api/capture/{APIKEY}?url=https://'+ url           
             response=requests.get(url)
-            data=json.loads(response.text)
-            try:
-                screenshot_urls.append(str(data.get("screenshot",None).get('data',None)))
-                print(screenshot_urls)
-            except:
-                screenshot_urls.append("Error")
-        print(screenshot_urls)
+            if 'error' in response.text:
+                url=f'https://www2png.com/api/capture/{APIKEY}?url=http://'+ temp
+                response=requests.get(url)
+            r=json.loads(response.text)
+            if r["image_url"]:
+                surl=r["image_url"]
+            else:
+                surl='error'
+            print(surl)
+            print(report_alive)
+            report_alive[c]["image"]=surl
+            c=c+1
+
 
     def subtakeover(self,subdomains):
         global takeover_urls,alive_urls,data
@@ -77,9 +87,13 @@ class subdomain:
             except:
                cname=''
             try:
-                response=requests.get('http://'+subdomain,timeout=3)
-                text=response.text
-                if response.status_code==200 or response.status_code==302:
+                try:
+                    response=requests.get('http://'+subdomain)
+                    text=response.text
+                except:
+                    response=requests.get('https://'+subdomain)
+                    text=response.text
+                if response.status_code==200 or response.status_code==302 or response.status_code==301:
                     c=c+1
                     alive_urls.append(subdomain)
                     data[c]={}
@@ -89,6 +103,7 @@ class subdomain:
                     wap=w.wappalyzer(response,scripts,js)
                     waps=','.join(list(set(wap)))
                     data[c]["technologies"]=waps
+                    data[c]["image"]=''
 #                    data[c]["cname"]=cname
             except:
                 text=''
@@ -141,11 +156,13 @@ class subdomain:
     
 
     def report(self,url):
+        global report_alive
         start=time.time()
         report_urls=self.all(url)
         print("url:completed")
         print("total:"+str(len(report_urls)))
         report_alive_urls,report_alive,report_takeover=self.subtakeover(report_urls)
+        self.screenshot(report_alive_urls)
         print("Completed alive and takeover")
 
 
@@ -167,6 +184,7 @@ class subdomain:
            <a class="ahead" href="http://{value["url"]}">{value["url"]}</a></td>
            
            <td class="ahead">{value["technologies"]}</td>
+           <td class="ahead"><a href="{value["image"]}"><img src={value["image"]} height=212px width=50px/></a></td>
             </tr>'''
         html_alive=html_alive+'</table><br>'
 
