@@ -53,6 +53,8 @@
 
 ## Credits :
 -Tech Signature related Scripts are taken from https://github.com/s0md3v/Striker/blob/master/db/tech_signatures.json and modified to be compatible with this tool.
+
+
 -Sublist3r Module is used as one of enumerating methods in this tool. https://github.com/aboul3la/Sublist3r
 
 ## Show your support
