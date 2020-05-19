@@ -141,4 +141,4 @@ cython_debug/
 
 #config
 
-/config.py
+/configs.py
