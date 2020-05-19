@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template ,url_for,redirect
-from AutoRec.AutoRec import autorec as s
+from autorec import autorec as s
 from threading import Thread
 app = Flask(__name__)
 
