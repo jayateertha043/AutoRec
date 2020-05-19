@@ -142,8 +142,7 @@ cython_debug/
 /AutoRec.bsdesign
 
 #configheroku
-
-#/configs.py
-#/Procfile
-#/runtime.txt
-#git rm -rf --cached .
+/configs.py
+/Procfile
+/runtime.txt
+git rm -rf --cached .
