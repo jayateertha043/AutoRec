@@ -174,7 +174,7 @@ class subdomain:
             </tr>'''
         html_subdomains=html_subdomains+'</table>'
         html_alive=f'<p class="dahead">Alive:{len(report_alive)}/{len(report_urls)}</p></br>'
-        html_alive=html_alive+'<table class="text-center" align="center" style="margin: 0px auto;width:80%;border: 1px solid black;background-color: cornflowerblue"><tr><th>SNO</th><th>HOST</th><th>Technologies Used</th></tr>'
+        html_alive=html_alive+'<table class="text-center" align="center" style="margin: 0px auto;width:80%;border: 1px solid black;background-color: cornflowerblue"><tr><th>SNO</th><th>HOST</th><th>Technologies Used</th><th>Screenshot</th></tr>'
         
         for key,value in report_alive.items():
             html_alive=html_alive+f'''
@@ -184,7 +184,7 @@ class subdomain:
            <a class="ahead" href="http://{value["url"]}">{value["url"]}</a></td>
            
            <td class="ahead">{value["technologies"]}</td>
-           <td class="ahead"><a href="{value["image"]}"><img src={value["image"]} height=500px width=500px/></a></td>
+           <td class="ahead"><a href="{value["image"]}"><img src={value["image"]} height=50px width=120px/></a></td>
             </tr>'''
         html_alive=html_alive+'</table><br>'
 
