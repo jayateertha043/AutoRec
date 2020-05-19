@@ -28,16 +28,20 @@
 
 ## DEMO:
 
-<img alt="DEMO" src="https://github.com/jayateertha043/AutoRec/blob/master/Home.PNG" height="500px" width="100%"><br />
-<img alt="DEMO" src="https://github.com/jayateertha043/AutoRec/blob/master/Relax.PNG" height="500px" width="100%"><br />
-<img alt="DEMO" src="https://github.com/jayateertha043/AutoRec/blob/master/Report.PNG" height="500px" width="100%"><br />
+<img alt="DEMO" src="https://github.com/jayateertha043/AutoRec/blob/master/Home.PNG" ><br />
+<img alt="DEMO" src="https://github.com/jayateertha043/AutoRec/blob/master/Relax.PNG" ><br />
+<img alt="DEMO" src="https://github.com/jayateertha043/AutoRec/blob/master/Report.PNG"><br />
 
 <br />
 
 ## To DO:
 
 *Add directory bruteforce,clickjacking,xss,openredirect etc tests by crawling pages and analysing source code and headers
+
+
 *Add MultiThreading
+
+
 *Make Code execute Faster
 
 ## Author
@@ -48,7 +52,7 @@
 * Github: [@jayateertha043](https://github.com/jayateertha043)
 
 ## Credits :
--Tech Signatures is taken from https://github.com/s0md3v/Striker/blob/master/db/tech_signatures.json and modified to be compatible with this tool.
+-Tech Signatures are taken from https://github.com/s0md3v/Striker/blob/master/db/tech_signatures.json and modified to be compatible with this tool.
 -Sublist3r Module is used as one of enumerating methods in this tool. https://github.com/aboul3la/Sublist3r
 
 ## Show your support
