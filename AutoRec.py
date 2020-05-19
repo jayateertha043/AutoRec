@@ -2,10 +2,10 @@ import requests
 import json
 import sublist3r
 from provider import providers
+from provider.report_const import html_start,html_end
 import dns.resolver
 import wappalyze as w
 from utils import func as f
-from report_const import html_start,html_end
 import os.path
 from slack import sendfiletoslack,sendmessage
 import time
@@ -22,7 +22,7 @@ screenshot_urls=[]
 alive_urls=[]
 data={}
 report_alive={}
-class subdomain:
+class autorec:
     def alienvault(self,url):
         global urls
         search=f'https://otx.alienvault.com/api/v1/indicators/domain/{url}/passive_dns'
@@ -55,7 +55,6 @@ class subdomain:
         urls=list(set(urls)) 
 
     def screenshot(self,url):
-        global report_alive
         surl='error'
         temp=url
         url=f'https://www2png.com/api/capture/{APIKEY}?url=https://'+ url           
@@ -136,20 +135,19 @@ class subdomain:
 
     def all(self,url):
         global urls
-        urls.clear()
+        urls.clear()     
         try:
             pass
- #           subdomain().sublister(url)
+ #           self.sublister(url)
         except:
             print("sublist3r failed")
-        
         try:
-            subdomain().crtsh(url)
+            self.crtsh(url)
         except:
             print("crtsh failed")
         
         try:
-            subdomain().alienvault(url)
+            self.alienvault(url)
         except:
             print("alienvault failed")
         

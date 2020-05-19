@@ -28,9 +28,9 @@
 
 ## DEMO:
 
-<img alt="DEMO" src="https://github.com/jayateertha043/AutoRec/blob/master/Home.PNG" ><br />
-<img alt="DEMO" src="https://github.com/jayateertha043/AutoRec/blob/master/Relax.PNG" ><br />
-<img alt="DEMO" src="https://github.com/jayateertha043/AutoRec/blob/master/Report.PNG"><br />
+<img alt="DEMO" src="https://github.com/jayateertha043/AutoRec/blob/master/static/assets/images/Home.PNG" ><br />
+<img alt="DEMO" src="https://github.com/jayateertha043/AutoRec/blob/master/static/assets/images/Relax.PNG" ><br />
+<img alt="DEMO" src="https://github.com/jayateertha043/AutoRec/blob/master/static/assets/images/Report.PNG"><br />
 
 <br />
 
@@ -52,7 +52,7 @@
 * Github: [@jayateertha043](https://github.com/jayateertha043)
 
 ## Credits :
--Tech Signatures are taken from https://github.com/s0md3v/Striker/blob/master/db/tech_signatures.json and modified to be compatible with this tool.
+-Tech Signature related Scripts are taken from https://github.com/s0md3v/Striker/blob/master/db/tech_signatures.json and modified to be compatible with this tool.
 -Sublist3r Module is used as one of enumerating methods in this tool. https://github.com/aboul3la/Sublist3r
 
 ## Show your support

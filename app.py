@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template ,url_for,redirect
-from subdomain import subdomain as s
+from AutoRec.AutoRec import autorec as s
 from threading import Thread
 app = Flask(__name__)
 
@@ -17,16 +17,11 @@ def myHome():
 def output():
     global urls,url
     s1=s()
-    print(type(s1))
     if request.method=='POST':
         if request.form['search']:
             url=request.form['search']
             try:
-                print(url)
-
-                def report_gen(subdomain:s1):
-                    print(url)
-                    print(type(s1))
+                def report_gen(AutoRec:s1):
                     s1.report(url)
                 thread = Thread(target=report_gen,args=(url,))
                 thread.start()
@@ -36,9 +31,40 @@ def output():
     else:
         return 'wrong method'
 
+    
+if __name__ == '__main__':
+    app.run()
 
 
-'''@app.route('/subdomains',methods=['GET'])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#additional routes in future
+    '''@app.route('/subdomains',methods=['GET'])
 def subdomains():
     global urls
     return render_template('subdomains.html',urls=urls,loaded=False)
@@ -57,6 +83,3 @@ def alive():
     alive_urls,data=s().alive(urls)
     print (data)
     return render_template('alive.html',data=data,urls=urls,loaded=False)'''
-    
-if __name__ == '__main__':
-    app.run()
