@@ -88,18 +88,19 @@ class subdomain:
                cname=''
             try:
                 try:
-                    response=requests.get('http://'+subdomain,timeout=10)
+                    response=requests.get('http://'+subdomain)
                     text=response.text
                 except:
-                    response=requests.get('https://'+subdomain,timeout=10)
+                    response=requests.get('https://'+subdomain)
                     text=response.text
-                if response.status_code==200 or response.status_code==301 or response.status_code==302 :
+                if response.status_code in [200,301,302] :
                     c=c+1
                     alive_urls.append(subdomain)
                     data[c]={}
                     data[c]["url"]=subdomain
                     scripts=f.script_extractor(text)
                     js=f.js_extractor(text)
+                    waps=''
                     wap=w.wappalyzer(response,scripts,js)
                     waps=','.join(list(set(wap)))
                     data[c]["technologies"]=waps
