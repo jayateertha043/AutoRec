@@ -1,4 +1,4 @@
-import requests
+import requests,urllib
 import json
 import sublist3r
 from provider import providers
@@ -57,11 +57,17 @@ class autorec:
     def screenshot(self,url):
         surl='error'
         temp=url
-        url=f'https://www2png.com/api/capture/{APIKEY}?url=https://'+ url           
-        response=requests.get(url)
-        if 'error' in response.text:
-            url=f'https://www2png.com/api/capture/{APIKEY}?url=http://'+ temp
+        url=f'https://www2png.com/api/capture/{APIKEY}?url=https://'+ url   
+        try:        
             response=requests.get(url)
+        except:
+            print("error getting image")
+        if 'error' in response.text:
+            try:
+                url=f'https://www2png.com/api/capture/{APIKEY}?url=http://'+ temp
+                response=requests.get(url)
+            except:
+                print("error getting image")
         r=json.loads(response.text)
         try:
             if r["image_url"]:
@@ -75,38 +81,68 @@ class autorec:
         global takeover_urls,alive_urls,data
         alive_urls.clear()
         data.clear()
-        c=0
         takeover_urls.clear()
-        text=''
+        st=[200,301,302]
+        status_code=0
+        count=0
         for subdomain in subdomains:
+            text=''
             try:
                 answer=dns.resolver.query(subdomain, "CNAME")
                 for i in answer:
                     cname=str(i)
             except:
                cname=''
-            try:
+            if 'http' or 'https' not in subdomain:
                 try:
-                    response=requests.get('http://'+subdomain)
+                    response=requests.get('http://'+subdomain,timeout=5)
                     text=response.text
+                    status_code=response.status_code
                 except:
-                    response=requests.get('https://'+subdomain)
+                    try:
+                        response=requests.get('https://'+subdomains,timeout=5)
+                        text=response.text
+                        status_code=response.status_code
+                    except:
+                        print(subdomain + " not alive")
+
+            else:
+                try:
+                    response=requests.get(subdomain,timeout=5)
                     text=response.text
-                if response.status_code in [200,301,302] :
-                    c=c+1
-                    alive_urls.append(subdomain)
-                    data[c]={}
-                    data[c]["url"]=subdomain
-                    scripts=f.script_extractor(text)
-                    js=f.js_extractor(text)
-                    waps=''
-                    wap=w.wappalyzer(response,scripts,js)
-                    waps=','.join(list(set(wap)))
-                    data[c]["technologies"]=waps
-                    data[c]["image"]=self.screenshot(subdomain)
-#                    data[c]["cname"]=cname
-            except:
-                text=''
+                    status_code=response.status_code
+                except:
+                    try:
+                        response=requests.get(subdomain,timeout=5)
+                        text=response.text
+                        status_code=response.status_code
+                    except:
+                        print(subdomain + " not alive")
+            
+            if status_code in st:
+
+#                print(subdomain + " " + str(response.status_code))
+                count=count+1
+ 
+
+                alive_urls.append(subdomain)
+
+
+                data[count]={}
+                data[count]["url"]=subdomain
+
+                scripts=f.script_extractor(text)
+                js=f.js_extractor(text)
+                waps=''
+                wap=w.wappalyzer(response,scripts,js)
+                waps=','.join(list(set(wap)))
+                data[count]["technologies"]=waps
+                data[count]["image"]=""
+                data[count]["image"]=self.screenshot(subdomain)
+                if data[count]["image"] == None or data[count]["image"] == '' :
+                    data[count]["image"]="error"
+
+#               data[c]["cname"]=cname
             for k in providers.provider:
                 c=False
                 r=False
@@ -116,11 +152,10 @@ class autorec:
                         c=True
 #                       print('cname match')
                 for res in k['response']:
-                    print
                     if res in text:
 #                      print('response match')
                         r=True
-                if c or r:
+                if c and r:
                     p=True
                     if p:
                         print(subdomain+' may be vulnerable to takeover')
@@ -137,8 +172,7 @@ class autorec:
         global urls
         urls.clear()     
         try:
-            pass
- #           self.sublister(url)
+            self.sublister(url)
         except:
             print("sublist3r failed")
         try:
@@ -172,8 +206,9 @@ class autorec:
         html_subdomains=html_subdomains+'</table>'
         html_alive=f'<p class="dahead">Alive:{len(report_alive)}/{len(report_urls)}</p></br>'
         html_alive=html_alive+'<table class="text-center" align="center" style="margin: 0px auto;width:80%;border: 1px solid black;background-color: cornflowerblue"><tr><th>SNO</th><th>HOST</th><th>Technologies Used</th><th>Screenshot</th></tr>'
-        
+
         for key,value in report_alive.items():
+
             html_alive=html_alive+f'''
         <tr>
             <td class="ahead">{key}</td>
@@ -241,5 +276,3 @@ class autorec:
 
 
 
-            
-        
