@@ -1,6 +1,6 @@
 import os
 
-if isHeroku in os.environ:
+if 'isHeroku' in os.environ:
     token=os.environ.get("token")
     channel=os.environ.get("channel")
     APIKEY=os.environ.get("APIKEY")
