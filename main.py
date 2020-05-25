@@ -123,7 +123,7 @@ class autorec:
                     except:
                         print(subdomain + " not alive")
             
-            if status_code in st:
+            if status_code ==200:
 
 #                print(subdomain + " " + str(response.status_code))
                 count=count+1
