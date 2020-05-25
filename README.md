@@ -36,7 +36,7 @@
 
 ## To DO:
 
-*Add directory bruteforce,clickjacking,xss,openredirect etc tests by crawling pages and analysing source code and headers
+*Add directory bruteforce,xss,openredirect etc tests by crawling pages and analysing source code and headers
 
 
 *Add MultiThreading
