@@ -70,7 +70,7 @@ class autorec:
                 print("error getting image")
         r=json.loads(response.text)
         try:
-            if r["image_url"]:
+            if 'https://' or 'http://' in r["image_url"]:
                 surl=r["image_url"]
         except:
             return surl
@@ -95,26 +95,30 @@ class autorec:
                cname=''
             if 'http' or 'https' not in subdomain:
                 try:
-                    response=requests.get('http://'+subdomain,timeout=5)
+                    response=requests.get('http://'+subdomain,timeout=3)
                     text=response.text
+                    headers=response.headers
                     status_code=response.status_code
                 except:
                     try:
-                        response=requests.get('https://'+subdomains,timeout=5)
+                        response=requests.get('https://'+subdomains,timeout=3)
                         text=response.text
+                        headers=response.headers
                         status_code=response.status_code
                     except:
                         print(subdomain + " not alive")
 
             else:
                 try:
-                    response=requests.get(subdomain,timeout=5)
+                    response=requests.get(subdomain,timeout=3)
                     text=response.text
+                    headers=response.headers
                     status_code=response.status_code
                 except:
                     try:
-                        response=requests.get(subdomain,timeout=5)
+                        response=requests.get(subdomain,timeout=3)
                         text=response.text
+                        headers=response.headers
                         status_code=response.status_code
                     except:
                         print(subdomain + " not alive")
@@ -136,11 +140,15 @@ class autorec:
                 waps=''
                 wap=w.wappalyzer(response,scripts,js)
                 waps=','.join(list(set(wap)))
+                
                 data[count]["technologies"]=waps
                 data[count]["image"]=""
                 data[count]["image"]=self.screenshot(subdomain)
                 if data[count]["image"] == None or data[count]["image"] == '' :
                     data[count]["image"]="error"
+                vulns=[]
+                if not "X-Frame-Options" in headers.keys(): vulns.append("clickjacking")
+                data[count]["vulns"]=','.join(list(set(vulns)))
 
 #               data[c]["cname"]=cname
             for k in providers.provider:
@@ -205,7 +213,7 @@ class autorec:
             </tr>'''
         html_subdomains=html_subdomains+'</table>'
         html_alive=f'<p class="dahead">Alive:{len(report_alive)}/{len(report_urls)}</p></br>'
-        html_alive=html_alive+'<table class="text-center" align="center" style="margin: 0px auto;width:80%;border: 1px solid black;background-color: cornflowerblue"><tr><th>SNO</th><th>HOST</th><th>Technologies Used</th><th>Screenshot</th></tr>'
+        html_alive=html_alive+'<table class="text-center" align="center" style="margin: 0px auto;width:80%;border: 1px solid black;background-color: cornflowerblue"><tr><th>SNO</th><th>HOST</th><th>Technologies Used</th><th>Vulns</th><th>Screenshot</th></tr>'
 
         for key,value in report_alive.items():
 
@@ -216,6 +224,7 @@ class autorec:
            <a class="ahead" href="http://{value["url"]}">{value["url"]}</a></td>
            
            <td class="ahead">{value["technologies"]}</td>
+           <td class="ahead">{value["vulns"]}</td>
            <td class="ahead"><a href="{value["image"]}"><img src={value["image"]} height=50px width=120px/></a></td>
             </tr>'''
         html_alive=html_alive+'</table><br>'
