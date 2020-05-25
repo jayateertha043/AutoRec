@@ -4,6 +4,7 @@ if isHeroku in os.environ:
     token=os.environ.get("token")
     channel=os.environ.get("channel")
     APIKEY=os.environ.get("APIKEY")
+    print("token:" + str(token))
 else:
     token='' #Enter Your Bot Token Here
     channel='' #Enter Your Channel Id here
