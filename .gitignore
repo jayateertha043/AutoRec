@@ -141,5 +141,5 @@ cython_debug/
 #bss file
 /AutoRec.bsdesign
 
-
+/.configs.py
 ##git rm -rf --cached .
