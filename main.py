@@ -56,8 +56,7 @@ class autorec:
 
     def screenshot(self,url):
         surl='error'
-        temp=url
-        url=f'https://www2png.com/api/capture/{APIKEY}?url=https://'+ url   
+        '''url=f'https://www2png.com/api/capture/{APIKEY}?url=https://'+ url   
         try:        
             response=requests.get(url)
         except:
@@ -73,7 +72,8 @@ class autorec:
             if 'https://' or 'http://' in r["image_url"]:
                 surl=r["image_url"]
         except:
-            return surl
+            return surl'''
+        surl="https://scrn.herokuapp.com/?url=http://"+ url
         return surl
 
 
